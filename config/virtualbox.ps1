@@ -65,6 +65,7 @@
 # p7zip -d Ubuntu_16.10_Yakkety-VB-64bit.7z
 
 # Variable Init phase
+$VBPATH="C:\Program Files\oracle\virtualbox\vboxmanage.exe"
 $VM_DISK_DIR=$HOME+"/vm_disks"
 $VDI=$VM_DISK_DIR+"/Ubuntu 18.10 Cosmic (64bit).vdi"
 $VMNAME="k_grok"
@@ -76,9 +77,9 @@ $VMNAME="k_grok"
 
 # Host configuration phase
 # On your host:
-./vboxmanage hostonlyif create
+&$VBPATH hostonlyif create
 # Assuming vboxnet1 was created
-./vboxmanage dhcpserver add --ifname "VirtualBox Host-Only Ethernet Adapter" --ip 192.168.56.2 --netmask 255.255.255.0 --lowerip 192.168.56.3 --upperip 192.168.56.254 --enable
+&$VBPATH dhcpserver add --ifname "VirtualBox Host-Only Ethernet Adapter" --ip 192.168.56.2 --netmask 255.255.255.0 --lowerip 192.168.56.3 --upperip 192.168.56.254 --enable
 
 # For more info about these instructions, see:
 # https://www.virtualbox.org/manual/ch08.html
@@ -87,29 +88,29 @@ $VMNAME="k_grok"
 # http://serverfault.com/questions/128685/how-can-i-get-the-bridged-ip-address-of-a-virtualbox-vm-running-in-headless-mode
 
 # VM creation phase
-./vboxmanage createvm --name $VMNAME --register
-./vboxmanage modifyvm $VMNAME --ostype Ubuntu_64
-./vboxmanage modifyvm $VMNAME --memory 2000
+&$VBPATH createvm --name $VMNAME --register
+&$VBPATH modifyvm $VMNAME --ostype Ubuntu_64
+&$VBPATH modifyvm $VMNAME --memory 2000
 
 # VM storage config phase
-./vboxmanage storagectl $VMNAME --name SATA --add sata --portcount 2 --controller IntelAhci --bootable on
-./vboxmanage storageattach $VMNAME --storagectl SATA --port 0 --device 0 --type hdd --medium $VDI
+&$VBPATH storagectl $VMNAME --name SATA --add sata --portcount 2 --controller IntelAhci --bootable on
+&$VBPATH storageattach $VMNAME --storagectl SATA --port 0 --device 0 --type hdd --medium $VDI
 
 # VM network config phase
-./vboxmanage modifyvm $VMNAME --nic1 nat --nictype1 virtio
-./vboxmanage modifyvm $VMNAME --nic2 hostonly --nictype2 82540EM
-./vboxmanage modifyvm $VMNAME --hostonlyadapter2 "VirtualBox Host-Only Ethernet Adapter"
+&$VBPATH modifyvm $VMNAME --nic1 nat --nictype1 virtio
+&$VBPATH modifyvm $VMNAME --nic2 hostonly --nictype2 82540EM
+&$VBPATH modifyvm $VMNAME --hostonlyadapter2 "VirtualBox Host-Only Ethernet Adapter"
 
 # VM console config phase (optional)
 # send serial console to a log file
-#./vboxmanage modifyvm $VMNAME --uart1 0x3F8 4
-#./vboxmanage modifyvm $VMNAME --uartmode1 file /tmp/k_grok-serial.log
+#&$VBPATH modifyvm $VMNAME --uart1 0x3F8 4
+#&$VBPATH modifyvm $VMNAME --uartmode1 file /tmp/k_grok-serial.log
 # this slows booting down, so if desired you can disable with
 #./ vboxmanage modifyvm $VMNAME --uartmode1 disconnected
 
 # VM Startup phase
 # Start VM
-./vboxmanage startvm $VMNAME
+&$VBPATH startvm $VMNAME
 
 # End of phases
 # password osboxes.org
