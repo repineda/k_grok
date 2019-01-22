@@ -68,7 +68,8 @@
 $VBPATH="C:\Program Files\oracle\virtualbox\vboxmanage.exe"
 $VM_DISK_DIR=$HOME+"\vm_disks"
 $VDI=$VM_DISK_DIR+"\Ubuntu 18.10 Cosmic (64bit).vdi"
-$VMNAME= Read-Host -Prompt 'Input UCSC UserID'
+$USER=Read-Host -Prompt 'Input UCSC UserID'
+$VMNAME='cmps107'+$USER
 # determine your host's primary network adapter ...
 # this may work on Linux
 #HOST_ADAPTER=$(ip link show up | grep "<BROAD" | cut -f2 -d":")
